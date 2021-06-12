@@ -18,6 +18,18 @@ let score = 0;
 // Init time
 let time = 10;
 
+// Set difficulty value in ls or medium
+let difficulty =
+  localStorage.getItem("difficulty") !== null
+    ? localStorage.getItem("difficulty")
+    : "medium";
+
+// Set difficulty selectvalue
+difficultySelect.value =
+  localStorage.getItem("difficulty") !== null
+    ? localStorage.getItem("difficulty")
+    : "medium";
+
 // Focus on text on start
 text.focus();
 
@@ -67,6 +79,8 @@ function gameOver() {
 addWordToDom();
 
 // Event listeners =========================================================
+
+// Typing
 text.addEventListener("input", (e) => {
   const insertedText = e.target.value;
 
@@ -77,8 +91,23 @@ text.addEventListener("input", (e) => {
     //   Clear
     e.target.value = "";
 
-    time += 2;
+    if (difficulty === "hard") {
+      time += 2;
+    } else if (difficulty === "medium") {
+      time += 3;
+    } else {
+      time += 5;
+    }
 
     updateTime();
   }
+});
+
+// Settings btn click
+settingsBtn.addEventListener("click", () => settings.classList.toggle("hide"));
+
+// Settings select
+settingsForm.addEventListener("change", (e) => {
+  difficulty = e.target.value;
+  localStorage.setItem("difficulty", difficulty);
 });
